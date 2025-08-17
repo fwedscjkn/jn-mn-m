@@ -27,110 +27,113 @@ struct conversionpage13: View {
             .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                Spacer()
-                
-                // Robot icon
-                ZStack {
-                    Circle()
-                        .fill(Color.white)
-                        .frame(width: 80, height: 80)
+                VStack(spacing: 0) {
+                    Spacer()
                     
-                    VStack(spacing: 4) {
-                        // Robot eyes with blinking animation
-                        HStack(spacing: 10) {
-                            Circle()
-                                .fill(Color.blue)
-                                .frame(width: 8, height: 8)
-                                .scaleEffect(animateUsers ? 1.0 : 0.8)
-                            Circle()
-                                .fill(Color.blue)
-                                .frame(width: 8, height: 8)
-                                .scaleEffect(animateUsers ? 1.0 : 0.8)
-                        }
-                        .animation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true), value: animateUsers)
+                    // Robot icon
+                    ZStack {
+                        Circle()
+                            .fill(Color.white)
+                            .frame(width: 80, height: 80)
                         
-                        // Robot mouth
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.gray)
-                            .frame(width: 20, height: 4)
+                        VStack(spacing: 4) {
+                            // Robot eyes with blinking animation
+                            HStack(spacing: 10) {
+                                Circle()
+                                    .fill(Color.blue)
+                                    .frame(width: 8, height: 8)
+                                    .scaleEffect(animateUsers ? 1.0 : 0.8)
+                                Circle()
+                                    .fill(Color.blue)
+                                    .frame(width: 8, height: 8)
+                                    .scaleEffect(animateUsers ? 1.0 : 0.8)
+                            }
+                            .animation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true), value: animateUsers)
+                            
+                            // Robot mouth
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Color.gray)
+                                .frame(width: 20, height: 4)
+                        }
                     }
-                }
-                .padding(.bottom, 30)
-                
-                // Title
-                Text("Creating your sleep report...")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 30)
-                    .padding(.bottom, 60)
-                    .opacity(animateUsers ? 1.0 : 0.0)
-                    .animation(.easeInOut(duration: 0.8).delay(0.3), value: animateUsers)
-                
-                // Progress Circle
-                ZStack {
-                    // Background circle
-                    Circle()
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 8)
-                        .frame(width: 160, height: 160)
+                    .padding(.bottom, 30)
                     
-                    // Progress circle
-                    Circle()
-                        .trim(from: 0.0, to: progress)
-                        .stroke(
-                            LinearGradient(
-                                gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.7)]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            ),
-                            style: StrokeStyle(lineWidth: 8, lineCap: .round)
-                        )
-                        .frame(width: 160, height: 160)
-                        .rotationEffect(.degrees(-90))
-                        .animation(.easeInOut(duration: 0.3), value: progress)
-                    
-                    // Percentage text
-                    Text("\(Int(progress * 100))%")
-                        .font(.system(size: 36, weight: .bold, design: .rounded))
+                    // Title
+                    Text("Creating your sleep report...")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
                         .foregroundColor(.white)
-                        .animation(.easeInOut(duration: 0.2), value: progress)
-                }
-                .padding(.bottom, 80)
-                .scaleEffect(animateUsers ? 1.0 : 0.8)
-                .opacity(animateUsers ? 1.0 : 0.0)
-                .animation(.spring(response: 0.8, dampingFraction: 0.8).delay(0.5), value: animateUsers)
-                
-                // User count section
-                VStack(spacing: 15) {
-                    Text("10+ Million Users")
-                        .font(.system(size: 32, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 30)
+                        .padding(.bottom, 60)
                         .opacity(animateUsers ? 1.0 : 0.0)
-                        .animation(.easeInOut(duration: 0.8).delay(1.0), value: animateUsers)
+                        .animation(.easeInOut(duration: 0.8).delay(0.3), value: animateUsers)
                     
-                    Text("have chosen shuteye")
-                        .font(.title2)
-                        .foregroundColor(.gray)
-                        .opacity(animateUsers ? 1.0 : 0.0)
-                        .animation(.easeInOut(duration: 0.8).delay(1.2), value: animateUsers)
-                }
-                .padding(.bottom, 40)
-                
-                // User avatars
-                UserAvatarsView()
+                    // Progress Circle
+                    ZStack {
+                        // Background circle
+                        Circle()
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 8)
+                            .frame(width: 160, height: 160)
+                        
+                        // Progress circle
+                        Circle()
+                            .trim(from: 0.0, to: progress)
+                            .stroke(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.7)]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                style: StrokeStyle(lineWidth: 8, lineCap: .round)
+                            )
+                            .frame(width: 160, height: 160)
+                            .rotationEffect(.degrees(-90))
+                            .animation(.easeInOut(duration: 0.3), value: progress)
+                        
+                        // Percentage text
+                        Text("\(Int(progress * 100))%")
+                            .font(.system(size: 36, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .animation(.easeInOut(duration: 0.2), value: progress)
+                    }
+                    .padding(.bottom, 80)
+                    .scaleEffect(animateUsers ? 1.0 : 0.8)
                     .opacity(animateUsers ? 1.0 : 0.0)
-                    .animation(.easeInOut(duration: 1.0).delay(1.5), value: animateUsers)
+                    .animation(.spring(response: 0.8, dampingFraction: 0.8).delay(0.5), value: animateUsers)
+                    
+                    // User count section
+                    VStack(spacing: 15) {
+                        Text("10+ Million Users")
+                            .font(.system(size: 32, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .opacity(animateUsers ? 1.0 : 0.0)
+                            .animation(.easeInOut(duration: 0.8).delay(1.0), value: animateUsers)
+                        
+                        Text("have chosen shuteye")
+                            .font(.title2)
+                            .foregroundColor(.gray)
+                            .opacity(animateUsers ? 1.0 : 0.0)
+                            .animation(.easeInOut(duration: 0.8).delay(1.2), value: animateUsers)
+                    }
+                    .padding(.bottom, 40)
+                    
+                    // User avatars
+                    UserAvatarsView()
+                        .opacity(animateUsers ? 1.0 : 0.0)
+                        .animation(.easeInOut(duration: 1.0).delay(1.5), value: animateUsers)
+                    
+                    Spacer()
+                }
+                .opacity(animateContent ? 1.0 : 0.0)
+                .scaleEffect(animateContent ? 1.0 : 0.95)
+                .animation(.easeOut(duration: 0.8), value: animateContent)
                 
                 Spacer()
                 
+                ConversionProgressBar(currentStep: 13, initialProgress: 12.0 / 17.0)
             }
-            
-            ConversionProgressBar(currentStep: 13, initialProgress: 12.0 / 17.0)
         }
-        .opacity(animateContent ? 1.0 : 0.0)
-        .scaleEffect(animateContent ? 1.0 : 0.95)
-        .animation(.easeOut(duration: 0.8), value: animateContent)
         .navigationBarHidden(true)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

@@ -66,69 +66,78 @@ struct ConversionPage14: View {
             .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // Header with back button
-                HStack {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .font(.title2)
-                            .foregroundColor(.white)
+                VStack(spacing: 0) {
+                    // Header with back button
+                    HStack {
+                        Button(action: {
+                            presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                        }
+                        .padding(.leading, 20)
+                        
+                        Spacer()
                     }
-                    .padding(.leading, 20)
+                    .padding(.top, 10)
+                    
+                    // Header
+                    VStack(spacing: 8) {
+                        Text("Accurate Sleep Recorder")
+                            .font(.title3)
+                            .fontWeight(.medium)
+                            .foregroundColor(.orange)
+                            .opacity(animateCards ? 1.0 : 0.0)
+                            .animation(.easeInOut(duration: 0.8).delay(0.2), value: animateCards)
+                        
+                        Text("Find out what you did in your sleep!")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 20)
+                            .opacity(animateCards ? 1.0 : 0.0)
+                            .animation(.easeInOut(duration: 0.8).delay(0.4), value: animateCards)
+                    }
+                    .padding(.bottom, 40)
+                    
+                    // Scrollable sleep events
+                    ScrollView {
+                        LazyVStack(spacing: 16) {
+                            ForEach(Array(sleepEvents.enumerated()), id: \.offset) { index, event in
+                                SleepEventCard(
+                                    event: event,
+                                    isSelected: selectedCard == index,
+                                    onTap: {
+                                        selectedCard = index
+                                        // Add haptic feedback
+                                        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                                        impactFeedback.impactOccurred()
+                                    }
+                                )
+                                .scaleEffect(animateCards ? 1.0 : 0.8)
+                                .opacity(animateCards ? 1.0 : 0.0)
+                                .animation(
+                                    .spring(response: 0.6, dampingFraction: 0.8)
+                                    .delay(Double(index) * 0.1 + 0.6),
+                                    value: animateCards
+                                )
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 120) // Extra space for button
+                    }
                     
                     Spacer()
                 }
-                .padding(.top, 10)
-                
-                // Header
-                VStack(spacing: 8) {
-                    Text("Accurate Sleep Recorder")
-                        .font(.title3)
-                        .fontWeight(.medium)
-                        .foregroundColor(.orange)
-                        .opacity(animateCards ? 1.0 : 0.0)
-                        .animation(.easeInOut(duration: 0.8).delay(0.2), value: animateCards)
-                    
-                    Text("Find out what you did in your sleep!")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 20)
-                        .opacity(animateCards ? 1.0 : 0.0)
-                        .animation(.easeInOut(duration: 0.8).delay(0.4), value: animateCards)
-                }
-                .padding(.bottom, 40)
-                
-                // Scrollable sleep events
-                ScrollView {
-                    LazyVStack(spacing: 16) {
-                        ForEach(Array(sleepEvents.enumerated()), id: \.offset) { index, event in
-                            SleepEventCard(
-                                event: event,
-                                isSelected: selectedCard == index,
-                                onTap: {
-                                    selectedCard = index
-                                    // Add haptic feedback
-                                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                                    impactFeedback.impactOccurred()
-                                }
-                            )
-                            .scaleEffect(animateCards ? 1.0 : 0.8)
-                            .opacity(animateCards ? 1.0 : 0.0)
-                            .animation(
-                                .spring(response: 0.6, dampingFraction: 0.8)
-                                .delay(Double(index) * 0.1 + 0.6),
-                                value: animateCards
-                            )
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 120) // Extra space for button
-                }
+                .opacity(animateContent ? 1.0 : 0.0)
+                .scaleEffect(animateContent ? 1.0 : 0.95)
+                .animation(.easeOut(duration: 0.8), value: animateContent)
                 
                 Spacer()
+                
+                ConversionProgressBar(currentStep: 14, initialProgress: 13.0 / 17.0)
             }
             
             // Floating continue button
@@ -159,12 +168,6 @@ struct ConversionPage14: View {
             }
             
         }
-        
-        .opacity(animateContent ? 1.0 : 0.0)
-        .scaleEffect(animateContent ? 1.0 : 0.95)
-        .animation(.easeOut(duration: 0.8), value: animateContent)
-        
-        ConversionProgressBar(currentStep: 14, initialProgress: 13.0 / 17.0)
         .navigationBarHidden(true)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

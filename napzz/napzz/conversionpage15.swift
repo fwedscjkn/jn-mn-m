@@ -41,132 +41,141 @@ struct ConversionPage15: View {
             .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // Header with back button
-                HStack {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .font(.title2)
-                            .foregroundColor(.white)
-                    }
-                    .padding(.leading, 20)
-                    
-                    Spacer()
-                }
-                .padding(.top, 10)
-                
-                // Header
-                VStack(spacing: 8) {
-                    Text("Best Sound Machine")
-                        .font(.title3)
-                        .fontWeight(.medium)
-                        .foregroundColor(.orange)
-                        .opacity(animateCards ? 1.0 : 0.0)
-                        .animation(.easeInOut(duration: 0.8).delay(0.2), value: animateCards)
-                    
-                    Text("Customized white noise helps you fall asleep faster")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 20)
-                        .opacity(animateCards ? 1.0 : 0.0)
-                        .animation(.easeInOut(duration: 0.8).delay(0.4), value: animateCards)
-                }
-                .padding(.bottom, 30)
-                
-                // Mock Phone Interface
-                VStack(spacing: 20) {
-                    // Phone mockup
-                    ZStack {
-                        // Phone frame
-                        RoundedRectangle(cornerRadius: 35)
-                            .fill(Color.black)
-                            .frame(width: 320, height: 580)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 35)
-                                    .stroke(Color.gray.opacity(0.3), lineWidth: 2)
-                            )
+                VStack(spacing: 0) {
+                    // Header with back button
+                    HStack {
+                        Button(action: {
+                            presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                        }
+                        .padding(.leading, 20)
                         
-                        // Screen content
-                        VStack(spacing: 0) {
-                            // Status bar mockup
-                            HStack {
-                                Text("9:41")
-                                    .font(.caption)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.white)
-                                Spacer()
-                                HStack(spacing: 2) {
-                                    Image(systemName: "wifi")
-                                        .font(.caption)
-                                        .foregroundColor(.white)
-                                    Image(systemName: "battery.75")
-                                        .font(.caption)
-                                        .foregroundColor(.white)
-                                }
-                            }
+                        Spacer()
+                    }
+                    .padding(.top, 10)
+                    
+                    // Header
+                    VStack(spacing: 8) {
+                        Text("Best Sound Machine")
+                            .font(.title3)
+                            .fontWeight(.medium)
+                            .foregroundColor(.orange)
+                            .opacity(animateCards ? 1.0 : 0.0)
+                            .animation(.easeInOut(duration: 0.8).delay(0.2), value: animateCards)
+                        
+                        Text("Customized white noise helps you fall asleep faster")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.center)
                             .padding(.horizontal, 20)
-                            .padding(.top, 10)
-                            .padding(.bottom, 20)
+                            .opacity(animateCards ? 1.0 : 0.0)
+                            .animation(.easeInOut(duration: 0.8).delay(0.4), value: animateCards)
+                    }
+                    .padding(.bottom, 30)
+                    
+                    // Mock Phone Interface
+                    VStack(spacing: 20) {
+                        // Phone mockup
+                        ZStack {
+                            // Phone frame
+                            RoundedRectangle(cornerRadius: 35)
+                                .fill(Color.black)
+                                .frame(width: 320, height: 580)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 35)
+                                        .stroke(Color.gray.opacity(0.3), lineWidth: 2)
+                                )
                             
-                            // App interface
-                            VStack(spacing: 15) {
-                                // Category tabs
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 12) {
-                                        ForEach(soundCategories, id: \.self) { category in
-                                            Button(action: {
-                                                selectedCategory = category
-                                            }) {
-                                                Text(category)
-                                                    .font(.system(size: 14, weight: .medium))
-                                                    .foregroundColor(selectedCategory == category ? .white : .gray)
-                                                    .padding(.horizontal, 16)
-                                                    .padding(.vertical, 8)
-                                                    .background(
-                                                        RoundedRectangle(cornerRadius: 20)
-                                                            .fill(selectedCategory == category ? Color.blue : Color.clear)
-                                                    )
-                                            }
-                                        }
-                                    }
-                                    .padding(.horizontal, 20)
-                                }
-                                
-                                // Sound grid
-                                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 15), count: 4), spacing: 15) {
-                                    ForEach(Array(sounds.prefix(12).enumerated()), id: \.offset) { index, sound in
-                                        SoundButton(
-                                            sound: sound,
-                                            isSelected: selectedSound == index,
-                                            onTap: {
-                                                selectedSound = index
-                                                let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                                                impactFeedback.impactOccurred()
-                                            }
-                                        )
+                            // Screen content
+                            VStack(spacing: 0) {
+                                // Status bar mockup
+                                HStack {
+                                    Text("9:41")
+                                        .font(.caption)
+                                        .fontWeight(.medium)
+                                        .foregroundColor(.white)
+                                    Spacer()
+                                    HStack(spacing: 2) {
+                                        Image(systemName: "wifi")
+                                            .font(.caption)
+                                            .foregroundColor(.white)
+                                        Image(systemName: "battery.75")
+                                            .font(.caption)
+                                            .foregroundColor(.white)
                                     }
                                 }
                                 .padding(.horizontal, 20)
+                                .padding(.top, 10)
+                                .padding(.bottom, 20)
                                 
-                                Spacer()
+                                // App interface
+                                VStack(spacing: 15) {
+                                    // Category tabs
+                                    ScrollView(.horizontal, showsIndicators: false) {
+                                        HStack(spacing: 12) {
+                                            ForEach(soundCategories, id: \.self) { category in
+                                                Button(action: {
+                                                    selectedCategory = category
+                                                }) {
+                                                    Text(category)
+                                                        .font(.system(size: 14, weight: .medium))
+                                                        .foregroundColor(selectedCategory == category ? .white : .gray)
+                                                        .padding(.horizontal, 16)
+                                                        .padding(.vertical, 8)
+                                                        .background(
+                                                            RoundedRectangle(cornerRadius: 20)
+                                                                .fill(selectedCategory == category ? Color.blue : Color.clear)
+                                                        )
+                                                }
+                                            }
+                                        }
+                                        .padding(.horizontal, 20)
+                                    }
+                                    
+                                    // Sound grid
+                                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 15), count: 4), spacing: 15) {
+                                        ForEach(Array(sounds.prefix(12).enumerated()), id: \.offset) { index, sound in
+                                            SoundButton(
+                                                sound: sound,
+                                                isSelected: selectedSound == index,
+                                                onTap: {
+                                                    selectedSound = index
+                                                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                                                    impactFeedback.impactOccurred()
+                                                }
+                                            )
+                                        }
+                                    }
+                                    .padding(.horizontal, 20)
+                                    
+                                    Spacer()
+                                }
+                                .background(
+                                    RoundedRectangle(cornerRadius: 30)
+                                        .fill(Color.black.opacity(0.9))
+                                )
+                                .padding(.horizontal, 8)
+                                .padding(.bottom, 8)
                             }
-                            .background(
-                                RoundedRectangle(cornerRadius: 30)
-                                    .fill(Color.black.opacity(0.9))
-                            )
-                            .padding(.horizontal, 8)
-                            .padding(.bottom, 8)
                         }
+                        .scaleEffect(animateCards ? 1.0 : 0.8)
+                        .opacity(animateCards ? 1.0 : 0.0)
+                        .animation(.spring(response: 0.8, dampingFraction: 0.8).delay(0.6), value: animateCards)
                     }
-                    .scaleEffect(animateCards ? 1.0 : 0.8)
-                    .opacity(animateCards ? 1.0 : 0.0)
-                    .animation(.spring(response: 0.8, dampingFraction: 0.8).delay(0.6), value: animateCards)
+                    
+                    Spacer()
                 }
+                .opacity(animateContent ? 1.0 : 0.0)
+                .scaleEffect(animateContent ? 1.0 : 0.95)
+                .animation(.easeOut(duration: 0.8), value: animateContent)
                 
                 Spacer()
+                
+                ConversionProgressBar(currentStep: 15, initialProgress: 14.0 / 17.0)
             }
             
             // Floating continue button
@@ -197,12 +206,6 @@ struct ConversionPage15: View {
             }
             
         }
-        
-        .opacity(animateContent ? 1.0 : 0.0)
-        .scaleEffect(animateContent ? 1.0 : 0.95)
-        .animation(.easeOut(duration: 0.8), value: animateContent)
-        
-        ConversionProgressBar(currentStep: 15, initialProgress: 14.0 / 17.0)
         .navigationBarHidden(true)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

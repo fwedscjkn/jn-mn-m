@@ -27,87 +27,89 @@ struct conversionpage12: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // Header with back button
-                HStack {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .font(.title2)
-                            .foregroundColor(.white)
+                VStack(spacing: 0) {
+                    // Header with back button
+                    HStack {
+                        Button(action: {
+                            presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                        }
+                        .padding(.leading, 20)
+                        
+                        Spacer()
                     }
-                    .padding(.leading, 20)
+                    
+                    // Robot icon
+                    ZStack {
+                        Circle()
+                            .fill(Color.white)
+                            .frame(width: 80, height: 80)
+                        
+                        VStack(spacing: 4) {
+                            // Robot eyes
+                            HStack(spacing: 10) {
+                                Circle()
+                                    .fill(Color.blue)
+                                    .frame(width: 8, height: 8)
+                                Circle()
+                                    .fill(Color.blue)
+                                    .frame(width: 8, height: 8)
+                            }
+                            
+                            // Robot mouth
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Color.gray)
+                                .frame(width: 20, height: 4)
+                        }
+                    }
+                    .padding(.top, 30)
+                    
+                    // Title
+                    Text("Have you been diagnosed with any of the following?")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 30)
+                        .padding(.top, 40)
+                    
+                    Spacer()
+                    
+                    // Answer options
+                    VStack(spacing: 20) {
+                        ForEach(Array(answers.enumerated()), id: \.offset) { index, answer in
+                            DiagnosisAnswerButton(
+                                emoji: answer.0,
+                                text: answer.1,
+                                isSelected: selectedAnswer == answer.1,
+                                action: {
+                                    selectedAnswer = answer.1
+                                    // Add haptic feedback
+                                    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                                    impactFeedback.impactOccurred()
+                                }
+                            )
+                            .scaleEffect(animateOptions ? 1.0 : 0.8)
+                            .opacity(animateOptions ? 1.0 : 0.0)
+                            .animation(.spring(response: 0.6, dampingFraction: 0.8).delay(Double(index) * 0.1), value: animateOptions)
+                        }
+                    }
+                    .padding(.horizontal, 20)
                     
                     Spacer()
                 }
-                
-                // Robot icon
-                ZStack {
-                    Circle()
-                        .fill(Color.white)
-                        .frame(width: 80, height: 80)
-                    
-                    VStack(spacing: 4) {
-                        // Robot eyes
-                        HStack(spacing: 10) {
-                            Circle()
-                                .fill(Color.blue)
-                                .frame(width: 8, height: 8)
-                            Circle()
-                                .fill(Color.blue)
-                                .frame(width: 8, height: 8)
-                        }
-                        
-                        // Robot mouth
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.gray)
-                            .frame(width: 20, height: 4)
-                    }
-                }
-                .padding(.top, 30)
-                
-                // Title
-                Text("Have you been diagnosed with any of the following?")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 30)
-                    .padding(.top, 40)
+                .opacity(animateContent ? 1.0 : 0.0)
+                .scaleEffect(animateContent ? 1.0 : 0.95)
+                .animation(.easeOut(duration: 0.8), value: animateContent)
                 
                 Spacer()
                 
-                // Answer options
-                VStack(spacing: 20) {
-                    ForEach(Array(answers.enumerated()), id: \.offset) { index, answer in
-                        DiagnosisAnswerButton(
-                            emoji: answer.0,
-                            text: answer.1,
-                            isSelected: selectedAnswer == answer.1,
-                            action: {
-                                selectedAnswer = answer.1
-                                // Add haptic feedback
-                                let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-                                impactFeedback.impactOccurred()
-                            }
-                        )
-                        .scaleEffect(animateOptions ? 1.0 : 0.8)
-                        .opacity(animateOptions ? 1.0 : 0.0)
-                        .animation(.spring(response: 0.6, dampingFraction: 0.8).delay(Double(index) * 0.1), value: animateOptions)
-                    }
-                }
-                .padding(.horizontal, 20)
-                
-                Spacer()
-                
-                Spacer()
+                ConversionProgressBar(currentStep: 12, initialProgress: 11.0 / 17.0)
             }
-            
-            ConversionProgressBar(currentStep: 12, initialProgress: 11.0 / 17.0)
         }
-        .opacity(animateContent ? 1.0 : 0.0)
-        .scaleEffect(animateContent ? 1.0 : 0.95)
-        .animation(.easeOut(duration: 0.8), value: animateContent)
         .navigationBarHidden(true)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

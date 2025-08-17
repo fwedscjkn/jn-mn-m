@@ -35,174 +35,178 @@ struct ConversionPage17: View {
             )
             .ignoresSafeArea()
             
-            ScrollView {
-                VStack(spacing: 0) {
-                    // Header section
-                    VStack(spacing: 20) {
-                        // Close and Restore buttons
-                        HStack {
-                            Button(action: {
-                                presentationMode.wrappedValue.dismiss()
-                            }) {
-                                Image(systemName: "xmark")
-                                    .font(.title2)
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(spacing: 0) {
+                        // Header section
+                        VStack(spacing: 20) {
+                            // Close and Restore buttons
+                            HStack {
+                                Button(action: {
+                                    presentationMode.wrappedValue.dismiss()
+                                }) {
+                                    Image(systemName: "xmark")
+                                        .font(.title2)
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    // Handle restore purchases
+                                }) {
+                                    Text("Restore")
+                                        .font(.headline)
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                            .padding(.horizontal, 20)
+                            
+                            // Main title
+                            VStack(spacing: 12) {
+                                Text("Just ShutEye, and sleep well")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .multilineTextAlignment(.center)
+                                
+                                Text("Get access to premium features! Unlimited sleep sounds, a sleep recorder, and more are waiting for you.")
+                                    .font(.body)
                                     .foregroundColor(.gray)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.horizontal, 20)
+                            }
+                            .opacity(animateContent ? 1.0 : 0.0)
+                            .animation(.easeInOut(duration: 0.8).delay(0.2), value: animateContent)
+                        }
+                        .padding(.bottom, 30)
+                        
+                        // Sleep cards carousel
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                ForEach(Array(sleepCards.enumerated()), id: \.offset) { index, card in
+                                    SleepCardView(card: card)
+                                        .scaleEffect(animateContent ? 1.0 : 0.8)
+                                        .opacity(animateContent ? 1.0 : 0.0)
+                                        .animation(
+                                            .spring(response: 0.6, dampingFraction: 0.8)
+                                            .delay(Double(index) * 0.1 + 0.4),
+                                            value: animateContent
+                                        )
+                                }
+                            }
+                            .padding(.horizontal, 20)
+                        }
+                        .padding(.bottom, 40)
+                        
+                        // Page indicators
+                        HStack(spacing: 8) {
+                            ForEach(0..<4, id: \.self) { index in
+                                Circle()
+                                    .fill(index == 1 ? Color.white : Color.gray.opacity(0.5))
+                                    .frame(width: 8, height: 8)
+                            }
+                        }
+                        .padding(.bottom, 40)
+                        
+                        // Subscription plans
+                        VStack(spacing: 16) {
+                            // Yearly plan (recommended)
+                            SubscriptionPlanView(
+                                title: "7-Day Free Trial",
+                                subtitle: "Then kr.499/year (only kr.41.58/month)",
+                                badge: "No Payment Now",
+                                isSelected: selectedPlan == 0,
+                                isRecommended: true
+                            ) {
+                                selectedPlan = 0
+                                let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                                impactFeedback.impactOccurred()
                             }
                             
-                            Spacer()
-                            
-                            Button(action: {
-                                // Handle restore purchases
-                            }) {
-                                Text("Restore")
-                                    .font(.headline)
-                                    .foregroundColor(.gray)
+                            // Monthly plan
+                            SubscriptionPlanView(
+                                title: "1 month kr. 89",
+                                subtitle: "",
+                                badge: "",
+                                isSelected: selectedPlan == 1,
+                                isRecommended: false
+                            ) {
+                                selectedPlan = 1
+                                let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                                impactFeedback.impactOccurred()
                             }
                         }
                         .padding(.horizontal, 20)
+                        .padding(.bottom, 30)
+                        .opacity(animateContent ? 1.0 : 0.0)
+                        .animation(.easeInOut(duration: 0.8).delay(0.8), value: animateContent)
                         
-                        // Main title
-                        VStack(spacing: 12) {
-                            Text("Just ShutEye, and sleep well")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .multilineTextAlignment(.center)
+                        // Continue button
+                        Button(action: {
+                            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                            impactFeedback.impactOccurred()
                             
-                            Text("Get access to premium features! Unlimited sleep sounds, a sleep recorder, and more are waiting for you.")
-                                .font(.body)
+                            // Handle subscription purchase
+                            onNext()
+                        }) {
+                            Text("Continue")
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 56)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .fill(Color.blue)
+                                )
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 20)
+                        .opacity(animateContent ? 1.0 : 0.0)
+                        .animation(.easeInOut(duration: 0.8).delay(1.0), value: animateContent)
+                        
+                        // Terms and Privacy
+                        VStack(spacing: 8) {
+                            HStack {
+                                Button(action: {
+                                    // Handle terms of service
+                                }) {
+                                    Text("Terms of Service")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                        .underline()
+                                }
+                                
+                                Text(" & ")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                
+                                Button(action: {
+                                    // Handle privacy policy
+                                }) {
+                                    Text("Privacy Policy")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                        .underline()
+                                }
+                            }
+                            
+                            Text("Please NOTE: After your 7-day free trial, your Apple ID payment method will be automatically charged.")
+                                .font(.caption)
                                 .foregroundColor(.gray)
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal, 20)
                         }
+                        .padding(.bottom, 30)
                         .opacity(animateContent ? 1.0 : 0.0)
-                        .animation(.easeInOut(duration: 0.8).delay(0.2), value: animateContent)
+                        .animation(.easeInOut(duration: 0.8).delay(1.2), value: animateContent)
                     }
-                    .padding(.bottom, 30)
-                    
-                    // Sleep cards carousel
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 16) {
-                            ForEach(Array(sleepCards.enumerated()), id: \.offset) { index, card in
-                                SleepCardView(card: card)
-                                    .scaleEffect(animateContent ? 1.0 : 0.8)
-                                    .opacity(animateContent ? 1.0 : 0.0)
-                                    .animation(
-                                        .spring(response: 0.6, dampingFraction: 0.8)
-                                        .delay(Double(index) * 0.1 + 0.4),
-                                        value: animateContent
-                                    )
-                            }
-                        }
-                        .padding(.horizontal, 20)
-                    }
-                    .padding(.bottom, 40)
-                    
-                    // Page indicators
-                    HStack(spacing: 8) {
-                        ForEach(0..<4, id: \.self) { index in
-                            Circle()
-                                .fill(index == 1 ? Color.white : Color.gray.opacity(0.5))
-                                .frame(width: 8, height: 8)
-                        }
-                    }
-                    .padding(.bottom, 40)
-                    
-                    // Subscription plans
-                    VStack(spacing: 16) {
-                        // Yearly plan (recommended)
-                        SubscriptionPlanView(
-                            title: "7-Day Free Trial",
-                            subtitle: "Then kr.499/year (only kr.41.58/month)",
-                            badge: "No Payment Now",
-                            isSelected: selectedPlan == 0,
-                            isRecommended: true
-                        ) {
-                            selectedPlan = 0
-                            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                            impactFeedback.impactOccurred()
-                        }
-                        
-                        // Monthly plan
-                        SubscriptionPlanView(
-                            title: "1 month kr. 89",
-                            subtitle: "",
-                            badge: "",
-                            isSelected: selectedPlan == 1,
-                            isRecommended: false
-                        ) {
-                            selectedPlan = 1
-                            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                            impactFeedback.impactOccurred()
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 30)
-                    .opacity(animateContent ? 1.0 : 0.0)
-                    .animation(.easeInOut(duration: 0.8).delay(0.8), value: animateContent)
-                    
-                    // Continue button
-                    Button(action: {
-                        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-                        impactFeedback.impactOccurred()
-                        
-                        // Handle subscription purchase
-                        onNext()
-                    }) {
-                        Text("Continue")
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 56)
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color.blue)
-                            )
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 20)
-                    .opacity(animateContent ? 1.0 : 0.0)
-                    .animation(.easeInOut(duration: 0.8).delay(1.0), value: animateContent)
-                    
-                    // Terms and Privacy
-                    VStack(spacing: 8) {
-                        HStack {
-                            Button(action: {
-                                // Handle terms of service
-                            }) {
-                                Text("Terms of Service")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                    .underline()
-                            }
-                            
-                            Text(" & ")
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                            
-                            Button(action: {
-                                // Handle privacy policy
-                            }) {
-                                Text("Privacy Policy")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                    .underline()
-                            }
-                        }
-                        
-                        Text("Please NOTE: After your 7-day free trial, your Apple ID payment method will be automatically charged.")
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 20)
-                    }
-                    .padding(.bottom, 30)
-                    .opacity(animateContent ? 1.0 : 0.0)
-                    .animation(.easeInOut(duration: 0.8).delay(1.2), value: animateContent)
-                    
-                    ConversionProgressBar(currentStep: 17, initialProgress: 16.0 / 17.0)
                 }
+                
+                Spacer()
+                
+                ConversionProgressBar(currentStep: 17, initialProgress: 16.0 / 17.0)
             }
         }
         .opacity(animateContent ? 1.0 : 0.0)

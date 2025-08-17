@@ -112,128 +112,137 @@ struct ConversionPage16: View {
             }
             
             VStack(spacing: 0) {
-                // Header with back button
-                HStack {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .font(.title2)
-                            .foregroundColor(.white)
+                VStack(spacing: 0) {
+                    // Header with back button
+                    HStack {
+                        Button(action: {
+                            presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                        }
+                        .padding(.leading, 20)
+                        
+                        Spacer()
                     }
-                    .padding(.leading, 20)
+                    .padding(.top, 10)
+                    
+                    // Header
+                    VStack(spacing: 8) {
+                        Text("Millions of Users' Choice")
+                            .font(.title3)
+                            .fontWeight(.medium)
+                            .foregroundColor(.orange)
+                            .opacity(animateCards ? 1.0 : 0.0)
+                            .animation(.easeInOut(duration: 0.8).delay(0.2), value: animateCards)
+                        
+                        Text("All you need about sleep, it's all in ShutEye")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 20)
+                            .opacity(animateCards ? 1.0 : 0.0)
+                            .animation(.easeInOut(duration: 0.8).delay(0.4), value: animateCards)
+                    }
+                    .padding(.bottom, 30)
+                    
+                    // Rating section
+                    VStack(spacing: 15) {
+                        // 5 stars
+                        HStack(spacing: 8) {
+                            ForEach(0..<5, id: \.self) { index in
+                                Image(systemName: "star.fill")
+                                    .font(.title2)
+                                    .foregroundColor(.yellow)
+                                    .scaleEffect(animateCards ? 1.0 : 0.5)
+                                    .opacity(animateCards ? 1.0 : 0.0)
+                                    .animation(.spring(response: 0.6, dampingFraction: 0.8).delay(Double(index) * 0.1 + 0.8), value: animateCards)
+                            }
+                        }
+                        
+                        // Rating badge
+                        VStack(spacing: 8) {
+                            HStack(spacing: 15) {
+                                // Left laurel
+                                Image(systemName: "leaf.fill")
+                                    .font(.title)
+                                    .foregroundColor(.yellow)
+                                    .rotationEffect(.degrees(-45))
+                                
+                                VStack(spacing: 2) {
+                                    Text("4.8")
+                                        .font(.system(size: 48, weight: .bold))
+                                        .foregroundColor(.yellow)
+                                    
+                                    Text("High-Rated App")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                    
+                                    Text("2024")
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                // Right laurel
+                                Image(systemName: "leaf.fill")
+                                    .font(.title)
+                                    .foregroundColor(.yellow)
+                                    .rotationEffect(.degrees(45))
+                            }
+                            
+                            // Laurel wreath bottom
+                            HStack(spacing: 4) {
+                                ForEach(0..<8, id: \.self) { _ in
+                                    Image(systemName: "leaf.fill")
+                                        .font(.caption)
+                                        .foregroundColor(.yellow.opacity(0.8))
+                                }
+                            }
+                            .rotationEffect(.degrees(180))
+                        }
+                        .scaleEffect(animateCards ? 1.0 : 0.8)
+                        .opacity(animateCards ? 1.0 : 0.0)
+                        .animation(.spring(response: 0.8, dampingFraction: 0.8).delay(1.0), value: animateCards)
+                    }
+                    .padding(.vertical, 20)
+                    
+                    // Reviews section
+                    ScrollView {
+                        LazyVStack(spacing: 12) {
+                            ForEach(Array(reviews.enumerated()), id: \.offset) { index, review in
+                                ReviewCard(
+                                    review: review,
+                                    isSelected: selectedReview == index,
+                                    onTap: {
+                                        selectedReview = index
+                                        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                                        impactFeedback.impactOccurred()
+                                    }
+                                )
+                                .scaleEffect(animateCards ? 1.0 : 0.8)
+                                .opacity(animateCards ? 1.0 : 0.0)
+                                .animation(
+                                    .spring(response: 0.6, dampingFraction: 0.8)
+                                    .delay(Double(index) * 0.1 + 1.2),
+                                    value: animateCards
+                                )
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 200) // Extra space for Earth and button
+                    }
                     
                     Spacer()
                 }
-                .padding(.top, 10)
-                
-                // Header
-                VStack(spacing: 8) {
-                    Text("Millions of Users' Choice")
-                        .font(.title3)
-                        .fontWeight(.medium)
-                        .foregroundColor(.orange)
-                        .opacity(animateCards ? 1.0 : 0.0)
-                        .animation(.easeInOut(duration: 0.8).delay(0.2), value: animateCards)
-                    
-                    Text("All you need about sleep, it's all in ShutEye")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 20)
-                        .opacity(animateCards ? 1.0 : 0.0)
-                        .animation(.easeInOut(duration: 0.8).delay(0.4), value: animateCards)
-                }
-                .padding(.bottom, 30)
-                
-                // Rating section
-                VStack(spacing: 15) {
-                    // 5 stars
-                    HStack(spacing: 8) {
-                        ForEach(0..<5, id: \.self) { index in
-                            Image(systemName: "star.fill")
-                                .font(.title2)
-                                .foregroundColor(.yellow)
-                                .scaleEffect(animateCards ? 1.0 : 0.5)
-                                .opacity(animateCards ? 1.0 : 0.0)
-                                .animation(.spring(response: 0.6, dampingFraction: 0.8).delay(Double(index) * 0.1 + 0.8), value: animateCards)
-                        }
-                    }
-                    
-                    // Rating badge
-                    VStack(spacing: 8) {
-                        HStack(spacing: 15) {
-                            // Left laurel
-                            Image(systemName: "leaf.fill")
-                                .font(.title)
-                                .foregroundColor(.yellow)
-                                .rotationEffect(.degrees(-45))
-                            
-                            VStack(spacing: 2) {
-                                Text("4.8")
-                                    .font(.system(size: 48, weight: .bold))
-                                    .foregroundColor(.yellow)
-                                
-                                Text("High-Rated App")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                
-                                Text("2024")
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
-                            }
-                            
-                            // Right laurel
-                            Image(systemName: "leaf.fill")
-                                .font(.title)
-                                .foregroundColor(.yellow)
-                                .rotationEffect(.degrees(45))
-                        }
-                        
-                        // Laurel wreath bottom
-                        HStack(spacing: 4) {
-                            ForEach(0..<8, id: \.self) { _ in
-                                Image(systemName: "leaf.fill")
-                                    .font(.caption)
-                                    .foregroundColor(.yellow.opacity(0.8))
-                            }
-                        }
-                        .rotationEffect(.degrees(180))
-                    }
-                    .scaleEffect(animateCards ? 1.0 : 0.8)
-                    .opacity(animateCards ? 1.0 : 0.0)
-                    .animation(.spring(response: 0.8, dampingFraction: 0.8).delay(1.0), value: animateCards)
-                }
-                .padding(.vertical, 20)
-                
-                // Reviews section
-                ScrollView {
-                    LazyVStack(spacing: 12) {
-                        ForEach(Array(reviews.enumerated()), id: \.offset) { index, review in
-                            ReviewCard(
-                                review: review,
-                                isSelected: selectedReview == index,
-                                onTap: {
-                                    selectedReview = index
-                                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                                    impactFeedback.impactOccurred()
-                                }
-                            )
-                            .scaleEffect(animateCards ? 1.0 : 0.8)
-                            .opacity(animateCards ? 1.0 : 0.0)
-                            .animation(
-                                .spring(response: 0.6, dampingFraction: 0.8)
-                                .delay(Double(index) * 0.1 + 1.2),
-                                value: animateCards
-                            )
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 200) // Extra space for Earth and button
-                }
+                .opacity(animateContent ? 1.0 : 0.0)
+                .scaleEffect(animateContent ? 1.0 : 0.95)
+                .animation(.easeOut(duration: 0.8), value: animateContent)
                 
                 Spacer()
+                
+                ConversionProgressBar(currentStep: 16, initialProgress: 15.0 / 17.0)
             }
             
             // Floating continue button
@@ -264,12 +273,6 @@ struct ConversionPage16: View {
             }
             
         }
-        
-        .opacity(animateContent ? 1.0 : 0.0)
-        .scaleEffect(animateContent ? 1.0 : 0.95)
-        .animation(.easeOut(duration: 0.8), value: animateContent)
-        
-        ConversionProgressBar(currentStep: 16, initialProgress: 15.0 / 17.0)
         .navigationBarHidden(true)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
